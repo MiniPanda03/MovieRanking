@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Library</title>
+    <style>
+      /* Set black background */
+      body {
+        background-color: #000;
+        color: #fff;
+        margin: 0;
+      }
+      
+      /* Centered navbar */
+      .navbar {
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 50px;
+        color: #fff;
+      }
+
+      /* Search form */
+      .search-form {
+        text-align: center;
+        margin: 20px;
+      }
+      
+      .search-input {
+        width: 300px;
+        padding: 5px;
+      }
+      
+      /* Sliding header */
+      .header-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+      }
+      
+      .sliding-header {
+        overflow: hidden;
+        white-space: nowrap;
+        animation: slide 10s infinite linear;
+      }
+      
+      .sliding-header span {
+        display: inline-block;
+        padding-right: 100%; /* Adjust the duration of slide animation */
+        font-size: 24px;
+      }
+      
+      @keyframes slide {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }
+      
+      /* Movies container */
+      .movies-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 20px;
+      }
+      
+      .movie {
+        width: 30%;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #fff;
+      }
+      
+      .movie img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+      }
+      
+      /* Pagination controls */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      
+      .pagination a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      .current-page {
+        color: #ff0;
+      }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="tabs">
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_account' %}">Moje konto</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+            <a href="{% url 'home' %}">Home</a>
+        </div>
+
+        <div class="search-form">
+          <form method="GET" action="">
+            <input type="text" name="search" class="search-input" placeholder="Search movies..." value="{{ search_query }}">
+            <input type="submit" value="Search">
+          </form>
+        </div>
+
+        <div class="header-container">
+          <div class="sliding-header">
+            <span>TRENDING MOVIES</span>
+          </div>
+        </div>
+
+        <div class="movies-container">
+          {% for movie in movies %}
+          <div class="movie">
+            <img src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="{{ movie.title }}">
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.overview }}</p>
+            <!-- Dodaj formularz do dodawania filmu do rankingu -->
+            {% if movie.id %}
+            <form method="POST" action="{% url 'add_movie_to_ranking' movie.id %}">
+              {% csrf_token %}
+              {% if user.is_authenticated %}
+              <input type="number" name="position" id="position-input" placeholder="Position" required>
+              <button type="submit" id="add-to-ranking-btn">Add to Ranking</button>
+              {% else %}
+              <p class="login-prompt">You need to <a style="color: yellow;" href="{% url 'login' %}">log in</a> to add movies to the ranking.</p>
+              {% endif %}
+            </form>
+            {% else %}
+              <p>Invalid movie or position.</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="pagination">
+          {% if movies.has_previous %}
+            <a href="?page={{ movies.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span class="current-page">{{ movies.number }}</span>
+          {% if movies.has_next %}
+            <a href="?page={{ movies.next_page_number }}">Next</a>
+          {% endif %}
+        </div>
+        
+</body>
+</html>

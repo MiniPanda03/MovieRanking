@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: black;
+        }
+
+        .form-container label,
+        .form-container input[type="text"],
+        .form-container input[type="password"],
+        .form-container input[type="email"],
+        .form-container input[type="submit"] {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+            font-size: 16px;
+            line-height: 1.5;
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.5);;
+            color: black;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .form-container input[type="submit"] {
+            color: black;
+            cursor: pointer;
+        }
+        .form-container input[type="submit"]:hover {
+            background-color: yellow;
+        }
+
+        .form-container .login-link {
+            margin-top: 10px;
+            text-decoration: none;
+            color: yellow;
+        }
+
+        .form-container label {
+            font-weight: bold;
+        }        
+        body {
+        background-color: #000;
+        }
+        
+        /* Center the content vertically and horizontally */
+        body, html {
+        height: 100%;
+        }
+        
+        body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        }
+        
+        /* Style the navbar */
+        nav {
+        text-align: center;
+        }
+        
+        nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        }
+        
+        nav ul li {
+        display: inline;
+        margin-right: 10px;
+        }
+        
+        nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        }
+        
+        /* Style the user information */
+        h1 {
+        color: #fff;
+        text-align: center;
+        }
+        
+        /* Style the movie ranking section */
+        .movie-ranking {
+        color: #fff;
+        text-align: center;
+        }
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin: 20px;
+            color: white;
+          }
+        .navbar a{
+            color: white;
+            text-decoration: none;
+          }
+    </style>
+</head>
+<body>
+    <div class="header">
+    <div class="navbar">
+    <a href="{% url 'register' %}" class="active">Register</a>
+    <a href="{% url 'login' %}" >Login</a>
+    <a href="{% url 'home' %}">Home</a>
+    </div>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <h2>User Registration</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="register">
+                <a href="{% url 'login' %}" class="login-link">Already have an account? Login</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

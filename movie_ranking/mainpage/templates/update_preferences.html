@@ -1,0 +1,12 @@
+<!-- update_preferences.html -->
+
+<form method="POST" action="{% url 'update_user_preferences' %}">
+    {% csrf_token %}
+    <input type="hidden" name="user_id" value="{{ user.id }}">
+    <select multiple name="favorite_movies">
+      {% for movie in movies %}
+        <option value="{{ movie.id }}">{{ movie.title }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Update Preferences</button>
+  </form>
